@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 import { getTranslations } from "next-intl/server";
+import ContactForm from "@/components/ui/ContactForm";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Contact");
@@ -106,28 +107,7 @@ export default async function ContactPage() {
               </div>
 
               <h2 className="font-headline text-2xl font-bold text-primary mb-6">{t("formTitle")}</h2>
-              <form className="flex flex-col gap-5">
-                <div>
-                  <label htmlFor="name" className="block font-body text-sm font-bold text-primary mb-2">{t("labelName")}</label>
-                  <input type="text" id="name" className="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder={t("placeholderName")} required />
-                </div>
-                
-                <div className="flex flex-col gap-5">
-                  <div>
-                    <label htmlFor="phone" className="block font-body text-sm font-bold text-primary mb-2">{t("labelPhone")}</label>
-                    <input type="tel" id="phone" className="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all" placeholder="05x xxx xxxx" required />
-                  </div>
-                </div>
-                
-                <div>
-                  <label htmlFor="message" className="block font-body text-sm font-bold text-primary mb-2">{t("labelMessage")}</label>
-                  <textarea id="message" rows={4} className="w-full bg-surface-container-lowest border border-outline-variant rounded-xl px-4 py-3 font-body text-sm focus:outline-none focus:border-secondary focus:ring-1 focus:ring-secondary transition-all resize-none" placeholder={t("placeholderMessage")} required></textarea>
-                </div>
-                
-                <button type="button" className="w-full mt-2 bg-primary text-on-primary py-4 rounded-xl font-headline font-bold text-base hover:bg-secondary transition-all duration-300 shadow-md">
-                  {t("sendButton")}
-                </button>
-              </form>
+              <ContactForm />
             </AnimatedSection>
           </div>
           
