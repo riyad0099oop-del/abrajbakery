@@ -24,7 +24,7 @@ export default function Preloader() {
       setIsLoading(false);
       document.body.style.overflow = "unset";
       sessionStorage.setItem("hasSeenPreloader", "true");
-    }, 2800);
+    }, 1500);
 
     return () => {
       clearTimeout(timer);

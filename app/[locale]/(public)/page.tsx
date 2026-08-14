@@ -83,8 +83,9 @@ export default async function HomePage() {
         <div className="absolute inset-0 z-0">
           <Image
             src="/images/hero-cake-new.jpg"
-            alt="برج التخفيضات"
+            alt="أبراج للحلويات"
             fill
+            sizes="100vw"
             className="object-cover object-center"
             priority
           />
@@ -96,8 +97,9 @@ export default async function HomePage() {
         <div className="absolute top-32 left-4 md:top-28 md:left-12 ltr:right-12 ltr:left-auto w-20 h-20 md:w-40 md:h-40 opacity-90 pointer-events-none select-none z-10">
           <Image 
             src="/images/1786624283616.png" 
-            alt="برج التخفيضات" 
+            alt="أبراج للحلويات" 
             fill
+            sizes="(max-width: 768px) 80px, 160px"
             className="object-contain"
           />
         </div>
@@ -185,6 +187,7 @@ export default async function HomePage() {
                       src={cat.image} 
                       alt={cat.name} 
                       fill 
+                      sizes="112px"
                       className="object-cover group-hover:scale-110 transition-transform duration-700" 
                     />
                   </div>
