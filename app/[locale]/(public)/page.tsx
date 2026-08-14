@@ -82,7 +82,7 @@ export default async function HomePage() {
         {/* Full Background Image (Cake on the right) */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/hero-cake-new.jpg"
+            src="/images/hero-cake-v2.jpg"
             alt="أبراج للحلويات"
             fill
             sizes="100vw"
@@ -96,7 +96,7 @@ export default async function HomePage() {
         {/* Floating Arabic Logo in the Left Corner */}
         <div className="absolute top-32 left-4 md:top-28 md:left-12 ltr:right-12 ltr:left-auto w-20 h-20 md:w-40 md:h-40 opacity-90 pointer-events-none select-none z-10">
           <Image 
-            src="/images/1786624283616.png" 
+            src="/images/logo-ar-v2.png" 
             alt="أبراج للحلويات" 
             fill
             sizes="(max-width: 768px) 80px, 160px"

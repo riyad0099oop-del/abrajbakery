@@ -8,6 +8,9 @@ export const routing = defineRouting({
   // Used when no locale matches
   defaultLocale: 'ar',
   
+  // Disable automatic locale detection to always force Arabic initially
+  localeDetection: false,
+  
   // Hide default locale in URL (e.g. / instead of /ar)
   localePrefix: 'as-needed'
 });
