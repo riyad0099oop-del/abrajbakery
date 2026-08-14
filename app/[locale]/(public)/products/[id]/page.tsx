@@ -27,12 +27,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   };
 }
 
-// Generate static params for all categories
-export async function generateStaticParams() {
-  return categories.map((cat) => ({
-    id: cat.id,
-  }));
-}
 
 export default async function CategoryPage({ params }: Props) {
   const resolvedParams = await params;
