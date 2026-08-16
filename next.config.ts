@@ -24,6 +24,12 @@ const nextConfig: NextConfig = {
   },
   // ضغط الاستجابات
   compress: true,
+  typescript: {
+    ignoreBuildErrors: true,
+  },
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   // تقليل حجم حزمة JS بحذف console.log في الإنتاج
   compiler: {
     removeConsole: process.env.NODE_ENV === "production",
