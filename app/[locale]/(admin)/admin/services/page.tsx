@@ -272,8 +272,6 @@ export default function AdminServicesPage() {
                 className="w-full bg-surface-container rounded-xl px-4 py-3 outline-none focus:ring-2 focus:ring-primary/50 text-on-surface"
               />
             </div>
-          </div>
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-bold text-on-surface mb-2">وصف الخدمة (عربي)</label>
