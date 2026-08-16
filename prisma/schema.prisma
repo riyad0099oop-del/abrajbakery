@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+}
+
+model Admin {
+  id            Int      @id @default(autoincrement())
+  username      String   @unique
+  password_hash String
+  createdAt     DateTime @default(now())
+}
+
+model Category {
+  id          Int       @id @default(autoincrement())
+  name        String
+  nameEn      String?
+  description String?
+  descriptionEn String?
+  tag         String?
+  tagEn       String?
+  image       String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Product {
+  id          Int      @id @default(autoincrement())
+  name        String
+  nameEn      String?
+  price       String   @default("حسب الطلب")
+  priceEn     String?
+  image       String?
+  status      String   @default("نشط")
+  categoryId  Int
+  category    Category @relation(fields: [categoryId], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([status])
+}
+
+model Offer {
+  id          Int      @id @default(autoincrement())
+  title       String
+  titleEn     String?
+  description String?
+  descriptionEn String?
+  discount    String
+  discountEn  String?
+  badge       String?
+  badgeEn     String?
+  image       String?
+  status      String   @default("نشط")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Service {
+  id          Int      @id @default(autoincrement())
+  title       String
+  titleEn     String?
+  description String?
+  descriptionEn String?
+  icon        String?
+  image       String?
+  status      String   @default("نشط")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([status])
+}
+
+model Branch {
+  id        Int      @id @default(autoincrement())
+  name      String
+  nameEn    String?
+  address   String?
+  addressEn String?
+  phone     String?
+  hours     String?
+  hoursEn   String?
+  status    String   @default("مفتوح")
+  image     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+}

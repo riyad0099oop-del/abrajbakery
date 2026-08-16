@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Link } from "@/i18n/routing";
 import Image from "next/image";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { categories } from "@/lib/data";
-import { getTranslations } from "next-intl/server";
+import prisma from "@/lib/prisma";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Products");
@@ -15,7 +15,10 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ProductsIndexPage() {
   const t = await getTranslations("Products");
+  const commonT = await getTranslations("Common");
   const tHome = await getTranslations("Home");
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
   return (
     <div className="bg-background min-h-screen">
@@ -48,30 +51,36 @@ export default async function ProductsIndexPage() {
       {/* Categories Grid */}
       <section className="max-w-[1280px] mx-auto px-5 md:px-16 py-20">
         <StaggerContainer className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.1}>
-          {categories.map((cat) => (
+          {(await prisma.category.findMany({ orderBy: { createdAt: "asc" } })).map((cat) => (
             <StaggerItem key={cat.id}>
               <Link
                 href={`/products/${cat.id}`}
                 className="block bg-surface-container-lowest rounded-2xl border border-outline-variant p-5 text-center hover:border-secondary hover:shadow-xl hover:-translate-y-2 transition-all duration-300 group h-full flex flex-col items-center"
               >
-                <div className="w-full h-48 mb-4 rounded-xl overflow-hidden relative">
-                  <Image 
-                    src={cat.image} 
-                    alt={tHome(`cat_${cat.id}_name` as any)} 
-                    fill 
-                    className="object-cover group-hover:scale-110 transition-transform duration-500" 
-                  />
+                <div className="w-full h-48 mb-4 rounded-xl overflow-hidden relative bg-surface-container">
+                  {cat.image ? (
+                    <Image 
+                      src={cat.image} 
+                      alt={cat.name} 
+                      fill 
+                      className="object-cover group-hover:scale-110 transition-transform duration-500" 
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                       <span className="material-symbols-outlined text-4xl text-on-surface-variant">category</span>
+                    </div>
+                  )}
                 </div>
                 <div className="mb-2">
                   <span className="bg-secondary-container text-on-secondary-container text-xs font-body font-medium px-3 py-1 rounded-full">
-                    {cat.tag}
+                    {isEn && cat.tagEn ? cat.tagEn : (cat.tag || commonT("category").replace(":", ""))}
                   </span>
                 </div>
                 <h2 className="font-headline font-bold text-2xl text-primary mb-3 mt-2">
-                  {tHome(`cat_${cat.id}_name` as any)}
+                  {isEn && cat.nameEn ? cat.nameEn : cat.name}
                 </h2>
                 <p className="font-body text-sm text-on-surface-variant flex-grow leading-relaxed">
-                  {tHome(`cat_${cat.id}_desc` as any)}
+                  {isEn && cat.descriptionEn ? cat.descriptionEn : (cat.description || commonT("browseProductsDesc"))}
                 </p>
                 <div className="mt-6 flex items-center justify-center gap-2 text-secondary font-body text-sm font-medium opacity-80 group-hover:opacity-100 group-hover:translate-x-[-4px] ltr:group-hover:translate-x-[4px] transition-all duration-300">
                   <span>{t("browseProducts")}</span>

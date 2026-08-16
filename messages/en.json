@@ -160,5 +160,31 @@
     "branch2Address": "Makkah, North Al-Sharaie District (Sharaie Al-Mujahideen)",
     "branch2Hours": "8:00 AM - 12:00 Midnight",
     "branch2Phone": "Coming Soon"
+  },
+  "Common": {
+    "noCategories": "No categories available currently.",
+    "browseProductsDesc": "Browse delicious products in this section",
+    "allProducts": "All Products",
+    "browseAllProducts": "Browse all our premium products",
+    "all": "All",
+    "noProductsFound": "Sorry, no products match your search.",
+    "searchProduct": "Search for a product...",
+    "category": "Category:",
+    "productDetails": "Product Details",
+    "price": "Price:",
+    "availability": "Availability:",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "similarProducts": "Similar Products",
+    "discoverSimilar": "Discover other products in the same category",
+    "noOffers": "Sorry, no offers currently.",
+    "noServices": "Sorry, no services currently.",
+    "workHours": "Working Hours:",
+    "phone": "Phone:",
+    "branchStatus": "Branch Status:",
+    "statusOpen": "Open",
+    "statusClosed": "Closed",
+    "statusTemporarilyClosed": "Temporarily Closed",
+    "linkedProducts": "linked products"
   }
 }

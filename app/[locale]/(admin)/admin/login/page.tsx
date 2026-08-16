@@ -2,23 +2,33 @@
 
 import React, { useState } from "react";
 import { useRouter } from "@/i18n/routing";
+import { login } from "@/lib/actions/auth";
 
 export default function AdminLogin() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleLogin = (e: React.FormEvent) => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    // Simulate authentication
-    setTimeout(() => {
+    try {
+      const res = await login(username, password);
+      if (res.success) {
+        router.push("/admin");
+      } else {
+        setError(res.error || "فشل تسجيل الدخول");
+        setLoading(false);
+      }
+    } catch (err) {
+      setError("حدث خطأ في الاتصال بالخادم");
       setLoading(false);
-      // For now, any login works in this static mock
-      router.push("/admin");
-    }, 1500);
+    }
   };
 
   return (
@@ -44,13 +54,15 @@ export default function AdminLogin() {
           )}
           
           <div className="space-y-2">
-            <label className="block text-sm font-bold text-on-surface">البريد الإلكتروني</label>
+            <label className="block text-sm font-bold text-on-surface">اسم المستخدم</label>
             <input 
-              type="email" 
+              type="text" 
               required
-              defaultValue="admin@abraj.com"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full px-4 py-3 rounded-xl bg-surface-container border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-on-surface"
-              placeholder="admin@abraj.com"
+              placeholder="admin"
+              dir="ltr"
             />
           </div>
 
@@ -59,9 +71,11 @@ export default function AdminLogin() {
             <input 
               type="password" 
               required
-              defaultValue="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 rounded-xl bg-surface-container border border-outline-variant focus:border-primary focus:ring-2 focus:ring-primary/20 transition-all outline-none text-on-surface"
               placeholder="••••••••"
+              dir="ltr"
             />
           </div>
 

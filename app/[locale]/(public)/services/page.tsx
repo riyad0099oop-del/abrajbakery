@@ -2,7 +2,8 @@ import { Metadata } from "next";
 import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { getTranslations } from "next-intl/server";
+import prisma from "@/lib/prisma";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Services");
@@ -14,37 +15,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ServicesPage() {
   const t = await getTranslations("Services");
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
-  const services = [
-    {
-      id: "weddings",
-      icon: "celebration",
-      title: t("service1Title"),
-      desc: t("service1Desc"),
-      image: "/images/service_wedding.jpg"
-    },
-    {
-      id: "custom",
-      icon: "cake",
-      title: t("service2Title"),
-      desc: t("service2Desc"),
-      image: "/images/service_custom.jpg"
-    },
-    {
-      id: "catering",
-      icon: "storefront",
-      title: t("service3Title"),
-      desc: t("service3Desc"),
-      image: "/images/service_catering.jpg"
-    },
-    {
-      id: "delivery",
-      icon: "local_shipping",
-      title: t("service4Title"),
-      desc: t("service4Desc"),
-      image: "/images/service_delivery.jpg"
-    }
-  ];
+  const services = await prisma.service.findMany({
+    where: { status: "نشط" },
+    orderBy: { createdAt: "desc" }
+  });
 
   return (
     <div className="bg-background min-h-screen">
@@ -85,9 +62,9 @@ export default async function ServicesPage() {
               <span className="material-symbols-outlined text-amber-600 dark:text-amber-400 text-2xl" style={{ fontVariationSettings: "'FILL' 1" }}>info</span>
             </div>
             <div>
-              <h3 className="font-headline font-bold text-base md:text-lg mb-0.5">تنبيه هام للطلبيات الخاصة والحفلات</h3>
+              <h3 className="font-headline font-bold text-base md:text-lg mb-0.5">{isEn ? "Important Notice for Special Orders and Parties" : "تنبيه هام للطلبيات الخاصة والحفلات"}</h3>
               <p className="font-body text-xs md:text-sm text-on-surface-variant leading-relaxed">
-                جميع الطلبيات الخاصة والتُرت وحفلات المناسبات تتطلب الحجز المسبق قبل يوم واحد (24 ساعة) على الأقل لضمان الجودة والدقة في التحضير.
+                {isEn ? "All special orders, cakes, and event catering require advance booking of at least 24 hours to ensure quality and precision in preparation." : "جميع الطلبيات الخاصة والتُرت وحفلات المناسبات تتطلب الحجز المسبق قبل يوم واحد (24 ساعة) على الأقل لضمان الجودة والدقة في التحضير."}
               </p>
             </div>
           </div>
@@ -101,12 +78,18 @@ export default async function ServicesPage() {
                 {/* Image */}
                 <div className="w-full lg:w-1/2">
                   <div className={`relative w-full aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-xl border-8 border-surface-container-lowest ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'} hover:rotate-0 transition-transform duration-500`}>
-                    <Image 
-                      src={service.image} 
-                      alt={service.title} 
-                      fill 
-                      className="object-cover"
-                    />
+                    {service.image ? (
+                      <Image 
+                        src={service.image} 
+                        alt={service.title} 
+                        fill 
+                        className="object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-surface-container text-on-surface-variant">
+                         <span className="material-symbols-outlined text-6xl">{service.icon || 'home_repair_service'}</span>
+                      </div>
+                    )}
                     <div className="absolute inset-0 bg-primary/10 mix-blend-multiply"></div>
                   </div>
                 </div>
@@ -117,10 +100,10 @@ export default async function ServicesPage() {
                     <span className="material-symbols-outlined text-3xl">{service.icon}</span>
                   </div>
                   <h2 className="font-headline text-3xl font-bold text-primary mb-4">
-                    {service.title}
+                    {isEn && service.titleEn ? service.titleEn : service.title}
                   </h2>
                   <p className="font-body text-on-surface-variant leading-relaxed text-lg mb-8">
-                    {service.desc}
+                    {isEn && service.descriptionEn ? service.descriptionEn : (service.description || "")}
                   </p>
                   <Link
                     href="/contact"

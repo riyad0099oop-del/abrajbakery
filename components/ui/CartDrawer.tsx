@@ -6,6 +6,7 @@ import Image from "next/image";
 
 export default function CartDrawer() {
   const t = useTranslations("Cart");
+  const tFooter = useTranslations("Footer");
   const { isCartOpen, closeCart, items, updateQuantity, removeItem, getTotalItems, clearCart } = useCartStore();
 
   if (!isCartOpen) return null;
@@ -105,7 +106,7 @@ export default function CartDrawer() {
             {/* Notice */}
             <div className="bg-amber-500/10 border border-amber-500/30 rounded-xl p-3 flex items-start gap-2 text-amber-900 dark:text-amber-200 text-xs font-body">
               <span className="material-symbols-outlined text-amber-600 text-base shrink-0 mt-0.5" style={{ fontVariationSettings: "'FILL' 1" }}>info</span>
-              <span>ملاحظة: الطلبيات الخاصة والحفلات تتطلب الحجز قبل 24 ساعة على الأقل.</span>
+              <span>{tFooter("customOrderNotice")}</span>
             </div>
 
             <button

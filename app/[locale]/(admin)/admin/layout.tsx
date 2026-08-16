@@ -2,11 +2,20 @@
 
 import React, { useState } from "react";
 import { Link } from "@/i18n/routing";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { logout } from "@/lib/actions/auth";
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  const router = useRouter();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+
+  const handleLogout = async () => {
+    await logout();
+    const match = pathname.match(/^\/(ar|en)/);
+    const locale = match ? match[1] : 'ar';
+    router.push(`/${locale}/admin/login`);
+  };
 
   // If the path contains /login, don't show the sidebar
   if (pathname.includes("/admin/login")) {
@@ -15,10 +24,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
 
   const navItems = [
     { name: "الرئيسية", href: "/admin", icon: "dashboard" },
+    { name: "أقسام المنتجات", href: "/admin/categories", icon: "category" },
     { name: "المنتجات", href: "/admin/products", icon: "inventory_2" },
+    { name: "الخدمات", href: "/admin/services", icon: "room_service" },
     { name: "العروض", href: "/admin/offers", icon: "local_offer" },
-    { name: "الطلبات", href: "/admin/orders", icon: "receipt_long" },
     { name: "الفروع", href: "/admin/branches", icon: "store" },
+    { name: "الإعدادات", href: "/admin/settings", icon: "settings" },
   ];
 
   return (
@@ -88,8 +99,15 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
           </button>
           <div className="flex-1"></div>
           <div className="flex items-center gap-4">
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-2 text-error hover:bg-error-container/50 px-4 py-2 rounded-xl transition-colors font-bold font-headline"
+            >
+              <span className="material-symbols-outlined">logout</span>
+              تسجيل الخروج
+            </button>
             <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center text-secondary font-bold font-headline">
-              M
+              A
             </div>
           </div>
         </header>

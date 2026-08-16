@@ -160,5 +160,31 @@
     "branch2Address": "مكة المكرمة، حي الشرائع الشمالية (شرائع المجاهدين)",
     "branch2Hours": "8:00 صباحاً - 12:00 منتصف الليل",
     "branch2Phone": "قريباً"
+  },
+  "Common": {
+    "noCategories": "لا توجد أقسام حالياً.",
+    "browseProductsDesc": "تصفح أشهى المنتجات في هذا القسم",
+    "allProducts": "كافة المنتجات",
+    "browseAllProducts": "تصفح جميع منتجاتنا المتميزة",
+    "all": "الكل",
+    "noProductsFound": "عذراً، لا توجد منتجات مطابقة لبحثك.",
+    "searchProduct": "ابحث عن منتج...",
+    "category": "القسم:",
+    "productDetails": "تفاصيل المنتج",
+    "price": "السعر:",
+    "availability": "حالة التوفر:",
+    "available": "متوفر",
+    "unavailable": "غير متوفر",
+    "similarProducts": "منتجات مشابهة",
+    "discoverSimilar": "اكتشف منتجات أخرى في نفس القسم",
+    "noOffers": "عذراً، لا توجد عروض حالياً.",
+    "noServices": "عذراً، لا توجد خدمات حالياً.",
+    "workHours": "ساعات العمل:",
+    "phone": "الهاتف:",
+    "branchStatus": "حالة الفرع:",
+    "statusOpen": "مفتوح",
+    "statusClosed": "مغلق",
+    "statusTemporarilyClosed": "مغلق مؤقتاً",
+    "linkedProducts": "منتجات مرتبطة"
   }
 }

@@ -3,7 +3,8 @@ import Image from "next/image";
 import { Link } from "@/i18n/routing";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
 import TiltCard from "@/components/ui/TiltCard";
-import { getTranslations } from "next-intl/server";
+import prisma from "@/lib/prisma";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Offers");
@@ -15,36 +16,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function OffersPage() {
   const t = await getTranslations("Offers");
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
-  const offers = [
-    {
-      id: "weekend-box",
-      title: t("offer1Title"),
-      desc: t("offer1Desc"),
-      discount: t("offer1Discount"),
-      image: "/images/offer_weekend_box.jpg",
-      color: "bg-[#FDE9D9]",
-      textColor: "text-[#B35914]"
-    },
-    {
-      id: "wedding-package",
-      title: t("offer2Title"),
-      desc: t("offer2Desc"),
-      discount: t("offer2Discount"),
-      image: "/images/offer_wedding_package.jpg",
-      color: "bg-[#EAE4DC]",
-      textColor: "text-[#6B5A4B]"
-    },
-    {
-      id: "sweet-morning",
-      title: t("offer3Title"),
-      desc: t("offer3Desc"),
-      discount: t("offer3Discount"),
-      image: "/images/offer_morning_sweets.jpg",
-      color: "bg-[#F5EBE4]",
-      textColor: "text-[#8C5F40]"
-    }
-  ];
+  const offers = await prisma.offer.findMany({
+    where: { status: "نشط" },
+    orderBy: { createdAt: "desc" }
+  });
 
   return (
     <div className="bg-background min-h-screen">
@@ -85,26 +63,32 @@ export default async function OffersPage() {
                 <div className="bg-surface-container-lowest rounded-[2rem] border border-outline-variant/50 overflow-hidden shadow-lg transition-shadow duration-300 group h-full flex flex-col w-full h-full" style={{ transform: "translateZ(30px)" }}>
                   
                   {/* Offer Image & Badge */}
-                  <div className="relative w-full h-56 overflow-hidden">
-                    <Image 
-                      src={offer.image} 
-                      alt={offer.title} 
-                      fill 
-                      className="object-cover group-hover:scale-110 transition-transform duration-700"
-                    />
+                  <div className="relative w-full h-56 overflow-hidden bg-surface-container">
+                    {offer.image ? (
+                      <Image 
+                        src={offer.image} 
+                        alt={offer.title} 
+                        fill 
+                        className="object-cover group-hover:scale-110 transition-transform duration-700"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-on-surface-variant">
+                         <span className="material-symbols-outlined text-4xl">local_offer</span>
+                      </div>
+                    )}
                     {/* Floating Discount Badge */}
-                    <div className={`absolute top-4 right-4 ${offer.color} ${offer.textColor} font-headline font-bold px-4 py-2 rounded-xl shadow-md rotate-3 group-hover:rotate-0 transition-transform duration-300 z-10`} style={{ transform: "translateZ(50px)" }}>
-                      {offer.discount}
+                    <div className={`absolute top-4 right-4 bg-[#FDE9D9] text-[#B35914] font-headline font-bold px-4 py-2 rounded-xl shadow-md rotate-3 group-hover:rotate-0 transition-transform duration-300 z-10`} style={{ transform: "translateZ(50px)" }}>
+                      {isEn && offer.discountEn ? offer.discountEn : offer.discount}
                     </div>
                   </div>
 
                   {/* Content */}
                   <div className="p-8 flex flex-col flex-grow bg-surface-container-lowest">
                     <h3 className="font-headline font-bold text-2xl text-primary mb-3">
-                      {offer.title}
+                      {isEn && offer.titleEn ? offer.titleEn : offer.title}
                     </h3>
                     <p className="font-body text-on-surface-variant text-sm leading-relaxed mb-6 flex-grow">
-                      {offer.desc}
+                      {isEn && offer.descriptionEn ? offer.descriptionEn : (offer.description || "")}
                     </p>
                     
                     <Link

@@ -1,6 +1,8 @@
 import { Metadata } from "next";
 import { AnimatedSection, StaggerContainer, StaggerItem } from "@/components/ui/AnimatedSection";
-import { getTranslations } from "next-intl/server";
+import prisma from "@/lib/prisma";
+import Image from "next/image";
+import { getTranslations, getLocale } from "next-intl/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("Branches");
@@ -12,27 +14,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function BranchesPage() {
   const t = await getTranslations("Branches");
+  const locale = await getLocale();
+  const isEn = locale === "en";
 
-  const branches = [
-    {
-      id: 1,
-      name: t("branch1Name"),
-      address: t("branch1Address"),
-      hours: t("branch1Hours"),
-      phone: t("branch1Phone"),
-      mapLink: "https://maps.google.com/?q=Makkah+Al-Aziziyah",
-      icon: "storefront"
-    },
-    {
-      id: 2,
-      name: t("branch2Name"),
-      address: t("branch2Address"),
-      hours: t("branch2Hours"),
-      phone: t("branch2Phone"),
-      mapLink: "https://maps.google.com/?q=Makkah+Al-Sharaie",
-      icon: "store"
-    }
-  ];
+  const branches = await prisma.branch.findMany({
+    where: { status: "مفتوح" },
+    orderBy: { createdAt: "asc" }
+  });
 
   return (
     <div className="bg-background min-h-screen">
@@ -72,29 +60,33 @@ export default async function BranchesPage() {
                 <div className="absolute -right-8 -top-8 w-32 h-32 bg-secondary/5 rounded-full blur-2xl group-hover:bg-secondary/10 transition-colors"></div>
 
                 <div className="relative z-10">
-                  <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6">
-                    <span className="material-symbols-outlined text-3xl">{branch.icon}</span>
+                  <div className="w-14 h-14 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mb-6 relative overflow-hidden">
+                    {branch.image ? (
+                      <Image src={branch.image} alt={branch.name} fill className="object-cover" />
+                    ) : (
+                      <span className="material-symbols-outlined text-3xl">store</span>
+                    )}
                   </div>
 
-                  <h3 className="font-headline text-2xl font-bold text-primary mb-4">{branch.name}</h3>
+                  <h3 className="font-headline text-2xl font-bold text-primary mb-4">{isEn && branch.nameEn ? branch.nameEn : branch.name}</h3>
                   
                   <div className="flex flex-col gap-4 mb-8">
                     <div className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-secondary mt-0.5">location_on</span>
-                      <p className="font-body text-on-surface-variant text-sm leading-relaxed">{branch.address}</p>
+                      <p className="font-body text-on-surface-variant text-sm leading-relaxed">{isEn && branch.addressEn ? branch.addressEn : (branch.address || "")}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-secondary mt-0.5">schedule</span>
-                      <p className="font-body text-on-surface-variant text-sm" dir="auto">{branch.hours}</p>
+                      <p className="font-body text-on-surface-variant text-sm" dir="auto">{isEn && branch.hoursEn ? branch.hoursEn : (branch.hours || "")}</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <span className="material-symbols-outlined text-secondary mt-0.5">call</span>
-                      <p className="font-body text-on-surface-variant text-sm font-bold" dir="ltr">{branch.phone}</p>
+                      <p className="font-body text-on-surface-variant text-sm font-bold" dir="ltr">{branch.phone || ""}</p>
                     </div>
                   </div>
 
                   <a 
-                    href={branch.mapLink}
+                    href={`https://maps.google.com/?q=${branch.address}`}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="inline-flex items-center justify-center gap-2 w-full bg-surface-container hover:bg-primary hover:text-white text-primary font-bold font-headline py-3 rounded-xl transition-colors duration-300 border border-outline-variant/30 hover:border-primary"

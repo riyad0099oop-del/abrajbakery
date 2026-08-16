@@ -73,7 +73,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "أبراج للحلويات | تصميم وطباعة في مكة",
+    title: "أبراج للحلويات | أجود الحلويات الشرقية والغربية بمكة",
     description: "متخصصون في الحلويات الشرقية والغربية والمخبوزات الطازجة بأفضل الأسعار.",
     images: ["/images/1786624083357.png"],
   },
